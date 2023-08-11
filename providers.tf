@@ -10,6 +10,8 @@ terraform {
     bucket                  = "terraform-s3-state-muhab"
     key                     = "my-terraform-project"
     region                  = "us-east-1"
+    profile = "default"
+
     # shared_credentials_file = "~/.aws/credentials"
   }
 }
