@@ -1,0 +1,52 @@
+- name: Install Node.js on EC2 instance
+  hosts: ec2_instance
+  gather_facts: no
+  become: yes
+  vars:
+    ansible_ssh_private_key_file: /home/runner/.ssh/id_rsa
+    ansible_python_interpreter: /usr/bin/python3
+    ansible_user: ec2-user
+    ansible_ssh_common_args: '-o StrictHostKeyChecking=no'
+  tasks:
+    - name: Wait for SSH to come up
+      wait_for:
+        host: "{{ inventory_hostname }}"
+        port: 22
+        delay: 60
+        timeout: 900
+        state: started
+
+    - name: Gathering Facts
+      setup:
+    - name: Update all packages
+      dnf:
+        name: '*'
+        state: latest
+    - name: Install tar and xz for unpacking Node.js binaries
+      dnf:
+        name:
+          - tar
+          - xz
+        state: present
+
+    - name: Download Node.js binary tarball
+      get_url:
+        url: https://nodejs.org/dist/v16.14.2/node-v16.14.2-linux-x64.tar.xz
+        dest: /tmp/node-v16.14.2-linux-x64.tar.xz
+
+    - name: Extract Node.js binary tarball
+      command:
+        cmd: tar -xf /tmp/node-v16.14.2-linux-x64.tar.xz -C /usr/local --strip-components 1
+    - name: Verify Node.js installation
+      command:
+        cmd: node -v
+      register: node_version
+
+    - name: Display Node.js version
+      debug:
+        msg: 'Node.js version is {{ node_version.stdout }}'
+
+    - name: Install PM2 globally
+      npm:
+        name: pm2
+        global: yes
