@@ -72,20 +72,24 @@ jobs:
 
       - name: Create Ansible Inventory
         run: |
-          echo '[ec2_instance]' > inventory.ini
+          echo '[ec2_instance]' > /home/runner/work/github-actions/github-
+            actions/inventory.ini
           echo '${{ needs.runterraform.outputs.public_ip }}' >> inventory.ini
 
-      # - name: Run Ansible Playbook
-      #   run: ansible-playbook -i inventory.ini playbook.yml
-      #   env:
-      #     ANSIBLE_HOST_KEY_CHECKING: False
-  deployAnsible:
-    needs: install-ansible
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v1
-    - uses: ./.github/actions/ansible
-      with: 
-        playbook: playbook.yml
-        inventory: localhost
+      - name: Run Ansible Playbook
+        run: ansible-playbook -i /home/runner/work/github-actions/github-actions/inventory.ini playbook.yml
+        env:
+          ANSIBLE_HOST_KEY_CHECKING: False
+  # deployAnsible:
+  #   needs: install-ansible
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Run Ansible playbook
+  #       uses: dawidd6/action-ansible-playbook@v2.5.0
+  #       with:
+  #         playbook: playbook.yml # path to your Ansible playbook
+  #         directory: ./
+  #         key: ${{ secrets.SSH_PRIVATE_KEY }} # the ssh private key for ansible to use to connect to the servers, stored as "ansible_ssh_private_key" in the GitHub secrets
+  #         inventory: ${{ secrets.ansible_inventory }} # the ansible inventory to use, stored as "ansible_inventory" in the GitHub secrets
+
           
