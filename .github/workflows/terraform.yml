@@ -74,10 +74,10 @@ jobs:
         run: |
           echo '[ec2_instance]' > inventory
           echo '${{ needs.runterraform.outputs.public_ip }}' >> inventory
-          ls -alR /home/runner/work/
+          cat inventory
 
       - name: Run Ansible Playbook
-        run: ansible-playbook -i /home/runner/work/github-actions/github-actions/inventory /home/runner/work/github-actions/github-actions/playbook.yml
+        run: ansible-playbook -i inventory playbook.yml
         env:
           ANSIBLE_HOST_KEY_CHECKING: False
   # deployAnsible:
