@@ -40,7 +40,7 @@ jobs:
         id: ip
         run: |
           IP=$(terraform output -raw instance_public_ip)
-          echo "{PUBLIC_IP}={$IP}" >> $GITHUB_OUTPUT
+          echo "PUBLIC_IP=$IP" >> $GITHUB_OUTPUT
           echo "The public IP is $IP"
     outputs:
       public_ip: ${{ steps.ip.outputs.PUBLIC_IP }}
