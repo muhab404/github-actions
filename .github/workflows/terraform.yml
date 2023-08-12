@@ -46,7 +46,7 @@ jobs:
       public_ip: ${{ steps.ip.outputs.PUBLIC_IP }}
 
 
-  ansible:
+  install-ansible:
     needs: runterraform  # Make this job depend on the `terraform` job
     runs-on: ubuntu-latest
     steps:
@@ -75,8 +75,17 @@ jobs:
           echo '[ec2_instance]' > inventory.ini
           echo '${{ needs.runterraform.outputs.public_ip }}' >> inventory.ini
 
-      - name: Run Ansible Playbook
-        run: ansible-playbook -i inventory.ini playbook.yml
-        env:
-          ANSIBLE_HOST_KEY_CHECKING: False
-
+      # - name: Run Ansible Playbook
+      #   run: ansible-playbook -i inventory.ini playbook.yml
+      #   env:
+      #     ANSIBLE_HOST_KEY_CHECKING: False
+  deployAnsible:
+    needs: install-ansible
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - uses: ./.github/actions/ansible
+      with: 
+        playbook: playbook.yml
+        inventory: localhost
+          
