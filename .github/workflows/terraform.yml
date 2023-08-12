@@ -80,6 +80,12 @@ jobs:
         run: ansible-playbook -i inventory playbook.yml
         env:
           ANSIBLE_HOST_KEY_CHECKING: False
+      
+      - name: test ssh
+        run: |
+          ssh -o StrictHostKeyChecking=no  ${{ secrets.EC2_USER }}@${{ needs.runterraform.outputs.public_ip }} "echo 'hello world'"
+          ssh -o StrictHostKeyChecking=no  ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} "echo 'hello world 2'"
+
   # deployAnsible:
   #   needs: install-ansible
   #   runs-on: ubuntu-latest
