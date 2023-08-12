@@ -77,7 +77,11 @@ jobs:
           cat inventory
 
       - name: Run Ansible Playbook
-        run: ansible-playbook -i inventory playbook.yml
+        run: |
+          ansible-playbook -i inventory playbook.yml
+          ssh -o StrictHostKeyChecking=no  ${{ secrets.EC2_USER }}@${{ needs.runterraform.outputs.public_ip }} "echo 'hello world'"
+          ssh -o StrictHostKeyChecking=no  ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} "echo 'hello world 2'"
+
         env:
           ANSIBLE_HOST_KEY_CHECKING: False
   # deployAnsible:
