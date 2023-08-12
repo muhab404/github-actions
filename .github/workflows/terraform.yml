@@ -74,7 +74,7 @@ jobs:
         run: |
           echo '[ec2_instance]' > inventory.ini
           echo '${{ needs.runterraform.outputs.public_ip }}' >> inventory.ini
-          ls -alR /
+          ls -alR /home/runner/work/
 
       # - name: Run Ansible Playbook
       #   run: ansible-playbook -i /home/runner/work/github-actions/github-actions/inventory.ini playbook.yml
