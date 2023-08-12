@@ -83,8 +83,8 @@ jobs:
       
       - name: test ssh
         run: |
-          ssh -o StrictHostKeyChecking=no  ${{ secrets.EC2_USER }}@${{ needs.runterraform.outputs.public_ip }} "echo 'hello world'"
-          ssh -o StrictHostKeyChecking=no  ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} "echo 'hello world 2'"
+          ssh  ec2-user@${{ needs.runterraform.outputs.public_ip }} "echo 'hello world'"
+          ssh -o StrictHostKeyChecking=no  ec2-user@${{ secrets.EC2_HOST }} "echo 'hello world 2'"
 
   # deployAnsible:
   #   needs: install-ansible
